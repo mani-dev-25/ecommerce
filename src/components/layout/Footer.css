@@ -1,0 +1,29 @@
+.footer-custom {
+  background: #111111;
+}
+
+.footer-link {
+  color: #aaa;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.footer-link:hover {
+  color: #ff6b00;
+}
+
+.social-icon {
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.social-icon:hover {
+  color: #ff6b00;
+  transform: translateY(-3px);
+}
+
+.newsletter-input {
+  border: none;
+  outline: none;
+  box-shadow: none !important;
+}

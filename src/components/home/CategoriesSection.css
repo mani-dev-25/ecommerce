@@ -1,0 +1,109 @@
+.categories-section {
+  background-color: var(--dark-color);
+}
+
+.category-subtitle {
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  font-weight: 600;
+  display: block;
+}
+
+.category-title {
+  letter-spacing: -0.5px;
+}
+
+.category-card {
+  position: relative;
+  height: 380px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px;
+}
+
+.category-card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.55) 60%, rgba(0, 0, 0, 0.85) 100%);
+  z-index: 1;
+  transition: background 0.4s ease;
+}
+
+.category-card-content {
+  position: relative;
+  z-index: 2;
+  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.product-count {
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.category-card-name {
+  font-size: 1.6rem;
+  letter-spacing: -0.5px;
+}
+
+.category-card-arrow {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.arrow-icon {
+  color: var(--light-color);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+/* Hover Effects */
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+}
+
+.category-card:hover .category-card-overlay {
+  background: linear-gradient(180deg, rgba(255, 107, 0, 0.15) 0%, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0.9) 100%);
+}
+
+.category-card:hover .category-card-content {
+  transform: translateY(-8px);
+}
+
+.category-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: inherit;
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.category-card:hover::before {
+  transform: scale(1.08);
+}
+
+.category-card:hover .category-card-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}

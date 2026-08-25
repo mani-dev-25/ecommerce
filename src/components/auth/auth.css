@@ -1,0 +1,527 @@
+/* ============================================
+   AUTH.CSS — Login & Register Styles
+   MATHU Premium Auth Module
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+  --black: #111111;
+  --orange: #ff6b00;
+  --orange-dark: #e05e00;
+  --white: #ffffff;
+  --light-gray: #f5f5f5;
+  --border: #e0e0e0;
+  --text-muted: #888888;
+  --shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --radius: 4px;
+  --transition: all 0.25s ease;
+}
+
+/* ── Layout ── */
+.auth-wrapper {
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 40px 20px;
+
+  background: #f5f5f5;
+
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.auth-box{
+  width:100%;
+  max-width:1100px;
+
+  min-height: 650px;
+  height: auto;
+
+  background:var(--white);
+
+
+  border-radius:24px;
+
+  overflow:hidden;
+
+  box-shadow:0 10px 40px rgba(0,0,0,0.12);
+
+  display:grid;
+
+  align-items:stretch;
+
+  grid-template-columns:42% 58%;
+}
+/* ── Left Banner ── */
+.auth-banner {
+  position: relative;
+
+  background: var(--black);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  padding: 3rem;
+
+  overflow: hidden;
+
+  height: 100%;
+}
+.auth-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, #1a1a1a 0%, #111 60%, #2a1a00 100%);
+  z-index: 0;
+}
+
+.auth-banner-img {
+  position:absolute;
+
+  top:0;
+  left:0;
+
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
+
+  opacity:0.35;
+
+  z-index:0;
+}
+
+.auth-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(17,17,17,0.9) 0%, rgba(17,17,17,0.3) 60%, transparent 100%);
+  z-index: 1;
+}
+
+.auth-banner-content {
+  position: relative;
+  z-index: 2;
+  color: var(--white);
+}
+
+.auth-banner-logo {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--white);
+  text-decoration: none;
+  display: block;
+  margin-bottom: auto;
+  position: absolute;
+  top: 3rem;
+  left: 3rem;
+}
+
+.auth-banner-logo span {
+  color: var(--orange);
+}
+
+.auth-banner-tagline {
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.auth-banner-headline {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+}
+
+.auth-banner-sub {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.6;
+  max-width: 320px;
+}
+
+/* ── Form Panel ── */
+.auth-panel {
+  display:flex;
+
+  justify-content:center;
+  align-items:center;
+
+  padding:60px 80px;
+
+  background:var(--white);
+
+  height:100%;
+}
+
+.auth-panel-inner {
+  width:100%;
+  max-width:420px;
+
+  animation: fadeSlideUp 0.45s ease both;
+}
+
+.auth-panel-header {
+  margin-bottom: 2.5rem;
+}
+
+.auth-step-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.auth-panel-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--black);
+  margin: 0 0 0.5rem;
+  line-height: 1.2;
+}
+
+.auth-panel-sub {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ── Form Controls ── */
+.auth-field {
+  margin-bottom: 1.25rem;
+}
+
+.auth-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--black);
+  margin-bottom: 0.5rem;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 1rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.92rem;
+  color: var(--black);
+  background: var(--white);
+  transition: var(--transition);
+  outline: none;
+}
+
+.auth-input:focus {
+  border-color: var(--black);
+  box-shadow: 0 0 0 3px rgba(17,17,17,0.06);
+}
+
+.auth-input.is-invalid {
+  border-color: #dc3545;
+}
+
+.auth-input.is-valid {
+  border-color: #28a745;
+}
+
+.auth-error {
+  font-size: 0.78rem;
+  color: #dc3545;
+  margin-top: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.input-group-wrapper {
+  position: relative;
+}
+
+.input-toggle-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  padding: 0;
+  line-height: 1;
+  font-size: 1.1rem;
+  transition: color 0.2s;
+}
+
+.input-toggle-icon:hover {
+  color: var(--black);
+}
+
+/* ── Checkbox & Links ── */
+.auth-check-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+}
+
+.auth-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--black);
+  cursor: pointer;
+  user-select: none;
+}
+
+.auth-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--black);
+  cursor: pointer;
+}
+
+.auth-link {
+  font-size: 0.85rem;
+  color: var(--black);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.auth-link:hover {
+  color: var(--orange);
+  border-bottom-color: var(--orange);
+}
+
+/* ── Buttons ── */
+.btn-auth-primary {
+  display: block;
+  width: 100%;
+  padding:1rem; 
+  background: var(--black);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-auth-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--orange);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 0;
+}
+
+.btn-auth-primary:hover::after {
+  transform: translateX(0);
+}
+
+.btn-auth-primary span {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-auth-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Social Buttons ── */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.75rem 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.btn-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 0.75rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--black);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-bottom: 0.75rem;
+}
+
+.btn-social:hover {
+  border-color: var(--black);
+  background: var(--light-gray);
+}
+
+.btn-social svg,
+.btn-social img {
+  width: 18px;
+  height: 18px;
+}
+
+/* ── Footer Redirect ── */
+.auth-redirect {
+  text-align: center;
+  font-size: 0.87rem;
+  color: var(--text-muted);
+  margin-top: 1.75rem;
+}
+
+.auth-redirect a {
+  color: var(--black);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid var(--black);
+  padding-bottom: 1px;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.auth-redirect a:hover {
+  color: var(--orange);
+  border-color: var(--orange);
+}
+
+/* ── Animations ── */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.auth-panel-inner {
+  animation: fadeSlideUp 0.45s ease both;
+}
+
+/* ── Responsive ── */
+@media (max-width: 767px) {
+
+  .auth-box{
+    grid-template-columns:1fr;
+    height:auto;
+  }
+
+  .auth-banner {
+    display:none !important;
+  }
+
+  .auth-panel {
+    padding:2.5rem 1.5rem;
+  }
+
+}
+
+/* ── OTP Verification Flow ── */
+.otp-input-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.otp-input-row .auth-input {
+  flex: 1;
+}
+
+.btn-otp-action {
+  padding: 0 20px;
+  background: var(--black);
+  color: var(--white);
+  border: 1.5px solid var(--black);
+  border-radius: var(--radius);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+
+.btn-otp-action:hover:not(:disabled) {
+  background: var(--orange);
+  border-color: var(--orange);
+}
+
+.btn-otp-action:disabled {
+  background: var(--light-gray);
+  color: var(--text-muted);
+  border-color: var(--border);
+  cursor: not-allowed;
+}
+
+.btn-otp-change-email {
+  background: none;
+  border: none;
+  color: var(--orange);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 6px;
+  display: inline-block;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.btn-otp-change-email:hover {
+  color: var(--orange-dark);
+}
+
+.otp-helper-text {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* ── Custom Animations ── */
+@keyframes fadeSlideDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-slide-down {
+  animation: fadeSlideDown 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

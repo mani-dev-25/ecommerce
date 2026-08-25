@@ -1,0 +1,45 @@
+body {
+  background: #f5f5f5;
+  font-family: Arial, sans-serif;
+}
+
+/* Hero Section */
+.hero-section {
+  height: 80vh;
+
+  background:
+    linear-gradient(
+      rgba(0,0,0,0.5),
+      rgba(0,0,0,0.5)
+    ),
+    url("https://images.unsplash.com/photo-1441986300917-64674bd600d8");
+
+  background-size: cover;
+  background-position: center;
+}
+
+/* Product Card */
+.product-card {
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+}
+
+.product-image {
+  height: 280px;
+  object-fit: cover;
+}
+
+/* Wishlist Button */
+.wishlist-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border-radius: 50%;
+  background: white;
+}

@@ -1,0 +1,113 @@
+/* ===== Custom Input Styles ===== */
+
+.custom-input-wrapper {
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.custom-input-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 6px;
+  letter-spacing: 0.3px;
+}
+
+.required-mark {
+  color: #ff6b00;
+  margin-left: 3px;
+}
+
+.custom-input-container {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 0 14px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.custom-input-container.focused {
+  border-color: #ff6b00;
+  box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+}
+
+.custom-input-container.has-error {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+.custom-input-container.is-disabled {
+  background: #f5f5f5;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.input-icon-left {
+  color: #999;
+  font-size: 1.1rem;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.custom-input-container.focused .input-icon-left {
+  color: #ff6b00;
+}
+
+.custom-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 12px 0;
+  font-size: 0.9rem;
+  color: #111111;
+  font-family: 'Inter', sans-serif;
+}
+
+.custom-textarea {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 12px 0;
+  font-size: 0.9rem;
+  color: #111111;
+  resize: vertical;
+  font-family: 'Inter', sans-serif;
+  min-height: 80px;
+}
+
+.custom-input::placeholder,
+.custom-textarea::placeholder {
+  color: #bbb;
+}
+
+.password-toggle {
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+  color: #ff6b00;
+}
+
+.input-error-message {
+  display: block;
+  color: #dc3545;
+  font-size: 0.78rem;
+  margin-top: 5px;
+  padding-left: 2px;
+  font-weight: 500;
+}

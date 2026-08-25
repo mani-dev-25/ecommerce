@@ -9,7 +9,7 @@ const { validateOrderPlace, validateOrderStatusUpdate } = require('../middleware
 // @route   POST /api/orders
 // @desc    Place a new order
 router.post('/', authMiddleware, validateOrderPlace, asyncHandler(async (req, res) => {
-  const { items, shippingAddress, contactPhone } = req.body;
+  const { items, shippingAddress, contactPhone, paymentMethod = 'cod' } = req.body;
 
   // 1. Verify stocks, calculate total amount natively on backend
   let totalAmount = 0;
@@ -79,6 +79,7 @@ router.post('/', authMiddleware, validateOrderPlace, asyncHandler(async (req, re
     shippingAddress: encryptedAddress,
     contactPhone: encryptedPhone,
     paymentStatus: 'pending',
+    paymentMethod: paymentMethod || 'cod',
     orderStatus: 'pending'
   });
 

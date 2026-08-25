@@ -6,7 +6,9 @@ const env = cleanEnv(process.env, {
   MONGODB_URI: url({ default: 'mongodb://localhost:27017/ecommerce' }),
   JWT_SECRET: str(),
   ENCRYPTION_KEY: str(),
-  CLIENT_URL: url({ default: 'http://localhost:5173' })
+  CLIENT_URL: url({ default: 'http://localhost:5173' }),
+  RAZORPAY_KEY_ID: str({ default: '' }),
+  RAZORPAY_KEY_SECRET: str({ default: '' })
 });
 
 module.exports = env;

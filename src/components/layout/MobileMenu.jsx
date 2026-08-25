@@ -102,16 +102,21 @@ const MobileMenu = ({ menuOpen, setMenuOpen }) => {
               <div className="text-white mt-4 text-center">
                 Hi, <strong className="text-warning">{user?.name}</strong>
               </div>
+              <Link to="/orders" onClick={() => setMenuOpen(false)}>
+                <button className="mobile-signup-btn mt-3 w-100" style={{ background: '#4f46e5', border: 'none' }}>
+                  📦 My Orders
+                </button>
+              </Link>
               {isAdmin && (
                 <Link to="/admin/dashboard" onClick={() => setMenuOpen(false)}>
-                  <button className="mobile-signup-btn mt-3 w-100" style={{ background: '#ff6b00', border: 'none' }}>
+                  <button className="mobile-signup-btn mt-2 w-100" style={{ background: '#ff6b00', border: 'none' }}>
                     Admin Panel
                   </button>
                 </Link>
               )}
               <button 
                 onClick={() => { logout(); setMenuOpen(false); }} 
-                className="mobile-login-btn mt-3 w-100"
+                className="mobile-login-btn mt-2 w-100"
               >
                 Logout
               </button>

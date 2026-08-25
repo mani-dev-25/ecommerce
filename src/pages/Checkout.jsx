@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/layout/Layout";
 import BillingForm from "../components/checkout/BillingForm";
@@ -9,11 +9,26 @@ import { api } from "../utils/api";
 import { showSuccess, showError } from "../components/common/Toast";
 import "../components/checkout/checkout.css";
 
+const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    if (window.Razorpay) {
+      resolve(true);
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
+
 function Checkout() {
   const [cartItems, setCartItems] = useState(() => getCart());
   const [loading, setLoading] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderId, setOrderId] = useState("");
+  const [razorpayPaymentId, setRazorpayPaymentId] = useState("");
   const navigate = useNavigate();
 
   // Address states
@@ -46,16 +61,13 @@ function Checkout() {
   // Error states
   const [billingErrors, setBillingErrors] = useState({});
   const [shippingErrors, setShippingErrors] = useState({});
-  const [cardErrors, setCardErrors] = useState({});
 
   // Payment states
-  const [paymentMethod, setPaymentMethod] = useState("card");
-  const [cardData, setCardData] = useState({
-    cardNumber: "",
-    cardName: "",
-    expiry: "",
-    cvv: "",
-  });
+  const [paymentMethod, setPaymentMethod] = useState("razorpay");
+
+  useEffect(() => {
+    loadRazorpayScript();
+  }, []);
 
   // Calculate prices
   const subtotal = cartItems.reduce(
@@ -81,31 +93,6 @@ function Checkout() {
     setShippingAddress((prev) => ({ ...prev, [name]: value }));
     if (shippingErrors[name]) {
       setShippingErrors((prev) => ({ ...prev, [name]: "" }));
-    }
-  };
-
-  const handleCardChange = (e) => {
-    let { name, value } = e.target;
-
-    // Automatic formatting for Card Number: 1234 5678 1234 5678
-    if (name === "cardNumber") {
-      value = value.replace(/\D/g, "").replace(/(.{4})/g, "$1 ").trim();
-    }
-    // Automatic formatting for Expiry Date: MM / YY
-    if (name === "expiry") {
-      value = value.replace(/\D/g, "");
-      if (value.length > 2) {
-        value = `${value.slice(0, 2)} / ${value.slice(2, 4)}`;
-      }
-    }
-    // Limit CVV to digits
-    if (name === "cvv") {
-      value = value.replace(/\D/g, "");
-    }
-
-    setCardData((prev) => ({ ...prev, [name]: value }));
-    if (cardErrors[name]) {
-      setCardErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
@@ -166,34 +153,6 @@ function Checkout() {
       if (Object.keys(sErrors).length > 0) isValid = false;
     }
 
-    // Validate Card Info if chosen
-    if (paymentMethod === "card") {
-      const cErrors = {};
-      const cleanCard = cardData.cardNumber.replace(/\s/g, "");
-      if (!cardData.cardNumber.trim()) {
-        cErrors.cardNumber = "Card number is required";
-      } else if (cleanCard.length !== 16) {
-        cErrors.cardNumber = "Card number must be 16 digits";
-      }
-
-      if (!cardData.cardName.trim()) cErrors.cardName = "Cardholder name is required";
-      
-      if (!cardData.expiry.trim()) {
-        cErrors.expiry = "Expiry date is required";
-      } else if (!/^\d{2}\s?\/\s?\d{2}$/.test(cardData.expiry)) {
-        cErrors.expiry = "Must be MM / YY";
-      }
-
-      if (!cardData.cvv.trim()) {
-        cErrors.cvv = "CVV is required";
-      } else if (cardData.cvv.length < 3) {
-        cErrors.cvv = "CVV must be 3 or 4 digits";
-      }
-
-      setCardErrors(cErrors);
-      if (Object.keys(cErrors).length > 0) isValid = false;
-    }
-
     return isValid;
   };
 
@@ -208,27 +167,99 @@ function Checkout() {
     try {
       const addressToUse = sameAsBilling ? billingAddress : shippingAddress;
       const formattedAddress = `${addressToUse.firstName} ${addressToUse.lastName}, ${addressToUse.addressLine1} ${addressToUse.addressLine2}, ${addressToUse.city}, ${addressToUse.state} - ${addressToUse.pincode}`;
-      
-      const orderData = {
-        items: cartItems.map(item => ({
-          productId: item.id,
-          quantity: item.quantity
-        })),
-        shippingAddress: formattedAddress,
-        contactPhone: addressToUse.phone
-      };
+      const itemsPayload = cartItems.map(item => ({
+        productId: item.id,
+        quantity: item.quantity
+      }));
 
-      const res = await api.placeOrder(orderData);
-      
-      setOrderPlaced(true);
-      setOrderId(res._id);
-      saveCart([]); // clear the shopping cart
-      window.dispatchEvent(new Event('cart-updated'));
-      showSuccess("Order placed successfully! 🎉");
+      if (paymentMethod === "razorpay") {
+        const loaded = await loadRazorpayScript();
+        if (!loaded) {
+          showError("Razorpay SDK failed to load. Check your internet connection.");
+          setLoading(false);
+          return;
+        }
+
+        // 1. Create Razorpay order on backend
+        const razorpayOrder = await api.createRazorpayOrder(itemsPayload);
+
+        // 2. Open Razorpay Checkout modal
+        const options = {
+          key: razorpayOrder.keyId,
+          amount: razorpayOrder.amount,
+          currency: razorpayOrder.currency,
+          name: "Vynex Store",
+          description: "E-Commerce Purchase Payment",
+          order_id: razorpayOrder.id,
+          prefill: {
+            name: `${addressToUse.firstName} ${addressToUse.lastName}`,
+            email: addressToUse.email,
+            contact: addressToUse.phone
+          },
+          theme: {
+            color: "#4f46e5"
+          },
+          handler: async function (response) {
+            try {
+              setLoading(true);
+              const verifyRes = await api.verifyRazorpayPayment({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                items: itemsPayload,
+                shippingAddress: formattedAddress,
+                contactPhone: addressToUse.phone
+              });
+
+              setOrderPlaced(true);
+              setOrderId(verifyRes._id);
+              setRazorpayPaymentId(response.razorpay_payment_id);
+              saveCart([]);
+              window.dispatchEvent(new Event("cart-updated"));
+              showSuccess("Payment successful! Order placed 🎉");
+            } catch (err) {
+              showError(err.message || "Payment verification failed.");
+            } finally {
+              setLoading(false);
+            }
+          },
+          modal: {
+            ondismiss: function () {
+              setLoading(false);
+              showError("Payment window closed.");
+            }
+          }
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.on("payment.failed", function (response) {
+          setLoading(false);
+          showError(`Payment failed: ${response.error.description || "Transaction declined"}`);
+        });
+        rzp.open();
+      } else {
+        // Cash on Delivery
+        const orderData = {
+          items: itemsPayload,
+          shippingAddress: formattedAddress,
+          contactPhone: addressToUse.phone,
+          paymentMethod: 'cod'
+        };
+
+        const res = await api.placeOrder(orderData);
+        
+        setOrderPlaced(true);
+        setOrderId(res._id);
+        saveCart([]);
+        window.dispatchEvent(new Event('cart-updated'));
+        showSuccess("Order placed successfully via COD! 🎉");
+      }
     } catch (error) {
-      showError(error.message || "Failed to place order.");
+      showError(error.message || "Failed to process order.");
     } finally {
-      setLoading(false);
+      if (paymentMethod !== "razorpay") {
+        setLoading(false);
+      }
     }
   };
 
@@ -247,13 +278,19 @@ function Checkout() {
                 <span className="text-muted">Order ID:</span>
                 <span className="fw-bold">{orderId}</span>
               </div>
+              {razorpayPaymentId && (
+                <div className="d-flex justify-content-between mb-2">
+                  <span className="text-muted">Razorpay Payment ID:</span>
+                  <span className="fw-bold text-success" style={{ fontFamily: 'monospace' }}>{razorpayPaymentId}</span>
+                </div>
+              )}
               <div className="d-flex justify-content-between mb-2">
                 <span className="text-muted">Total Paid:</span>
                 <span className="fw-bold text-primary">₹ {total.toLocaleString('en-IN')}</span>
               </div>
               <div className="d-flex justify-content-between mb-2">
                 <span className="text-muted">Payment Mode:</span>
-                <span className="fw-bold">{paymentMethod === "card" ? "Credit/Debit Card" : "Cash on Delivery"}</span>
+                <span className="fw-bold">{paymentMethod === "razorpay" ? "Razorpay Online Payment" : "Cash on Delivery"}</span>
               </div>
               <div className="d-flex justify-content-between">
                 <span className="text-muted">Est. Delivery:</span>
@@ -337,9 +374,6 @@ function Checkout() {
                 <PaymentMethod
                   selected={paymentMethod}
                   onChange={setPaymentMethod}
-                  cardData={cardData}
-                  onCardChange={handleCardChange}
-                  cardErrors={cardErrors}
                 />
               </div>
             </div>

@@ -208,5 +208,34 @@ export const api = {
       },
       body: JSON.stringify(updateData)
     });
+  },
+
+  // ================= PAYMENT API =================
+  async getRazorpayKey() {
+    return fetchWithAuth(`${BASE_URL}/payment/key`, {
+      headers: { ...getAuthHeaders() }
+    });
+  },
+
+  async createRazorpayOrder(items) {
+    return fetchWithAuth(`${BASE_URL}/payment/create-order`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders()
+      },
+      body: JSON.stringify({ items })
+    });
+  },
+
+  async verifyRazorpayPayment(paymentData) {
+    return fetchWithAuth(`${BASE_URL}/payment/verify`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders()
+      },
+      body: JSON.stringify(paymentData)
+    });
   }
 };

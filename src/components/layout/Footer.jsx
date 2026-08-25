@@ -73,7 +73,7 @@ const Footer = () => {
 
             <div className="mt-3 text-secondary">
 
-              <p>Email : support@vynex.com</p>
+              <p>Email : pynerix@gmail.com</p>
 
               <p>Phone : +91 9597334312</p>
 

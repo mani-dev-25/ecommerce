@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import Orders from "./pages/Orders";
 import Men from "./pages/Men";
 import Women from "./pages/Women";
 /* ================= ADMIN PAGES ================= */
@@ -105,6 +106,15 @@ function App() {
           element={
             <ProtectedRoute>
               <Checkout />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <Orders />
             </ProtectedRoute>
           }
         />

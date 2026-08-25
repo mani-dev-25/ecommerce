@@ -3,7 +3,12 @@ import {
   FaShoppingCart,
   FaHeart,
   FaBars,
-  FaSearch
+  FaSearch,
+  FaUser,
+  FaBox,
+  FaSignOutAlt,
+  FaShieldAlt,
+  FaChevronDown
 } from "react-icons/fa";
 
 import { Link, useNavigate } from "react-router-dom";
@@ -18,6 +23,7 @@ import "./Navbar.css";
 const Navbar = () => {
   const { user, logout, isAuthenticated, isAdmin } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -207,6 +213,15 @@ const Navbar = () => {
               Women
             </Link>
 
+            {isAuthenticated && (
+              <Link
+                to="/orders"
+                className="nav-link-custom position-relative text-warning fw-semibold"
+              >
+                My Orders
+              </Link>
+            )}
+
           </div>
 
           {/* Right Icons */}
@@ -244,21 +259,67 @@ const Navbar = () => {
 
             <div className="d-flex align-items-center gap-3">
               {isAuthenticated ? (
-                <>
-                  <span className="text-white-50 small d-none d-xl-inline">
-                    Hello, <strong className="text-white">{user?.name}</strong>
-                  </span>
-                  {isAdmin && (
-                    <Link to="/admin/dashboard">
-                      <button className="signup-btn" style={{ background: '#ff6b00', border: 'none' }}>
-                        Admin
-                      </button>
-                    </Link>
-                  )}
-                  <button onClick={logout} className="login-btn">
-                    Logout
+                <div className="position-relative">
+                  <button
+                    className="btn btn-outline-light rounded-pill d-flex align-items-center gap-2 px-3 py-1 fw-semibold"
+                    style={{ fontSize: "0.85rem", border: "1px solid #555" }}
+                    onClick={() => setUserDropdownOpen(prev => !prev)}
+                  >
+                    <div
+                      className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                      style={{ width: "24px", height: "24px", fontSize: "0.75rem" }}
+                    >
+                      {user?.name ? user.name.charAt(0).toUpperCase() : <FaUser />}
+                    </div>
+                    <span>{user?.name}</span>
+                    <FaChevronDown size={10} />
                   </button>
-                </>
+
+                  {userDropdownOpen && (
+                    <div
+                      className="user-menu-dropdown"
+                      onMouseLeave={() => setUserDropdownOpen(false)}
+                    >
+                      <div className="px-3 py-2 border-bottom">
+                        <div className="fw-bold text-dark">{user?.name}</div>
+                        <div className="text-secondary small">{user?.email}</div>
+                      </div>
+
+                      <Link
+                        to="/orders"
+                        className="user-menu-item"
+                        onClick={() => setUserDropdownOpen(false)}
+                      >
+                        <FaBox className="text-primary" />
+                        <span>My Orders</span>
+                      </Link>
+
+                      {isAdmin && (
+                        <Link
+                          to="/admin/dashboard"
+                          className="user-menu-item"
+                          onClick={() => setUserDropdownOpen(false)}
+                        >
+                          <FaShieldAlt className="text-warning" />
+                          <span>Admin Panel</span>
+                        </Link>
+                      )}
+
+                      <div className="user-menu-divider"></div>
+
+                      <div
+                        className="user-menu-item text-danger"
+                        onClick={() => {
+                          setUserDropdownOpen(false);
+                          logout();
+                        }}
+                      >
+                        <FaSignOutAlt />
+                        <span>Logout</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <>
                   <Link to="/login">
